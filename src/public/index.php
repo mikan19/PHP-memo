@@ -12,9 +12,13 @@ $statement = $pdo->prepare($sql);
 $statement->execute();
 $pages = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+$standard_key_array = array(); // $standard_key_arrayを初期化
+
 foreach ($pages as $key => $value) {
-    $standard_key_array[$key] = $value['created_at'];
+    $standard_key_array[$key] = strtotime($value['created_at']);
+    $pages[$key]['created_at'] = date('Y年m月d日 H時i分s秒', $standard_key_array[$key]); // 日本語表記に変換
 }
+
 array_multisort($standard_key_array, SORT_DESC, $pages);
 ?>
 
